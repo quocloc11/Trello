@@ -43,7 +43,7 @@ function Profiles() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 34, height: 34 }}
+            sx={{ width: 36, height: 36 }}
             alt='quocloc'
             src='https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-1/412460133_663358269330962_2308163529691051646_n.jpg?stp=cp6_dst-jpg_s200x200&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeGTdVO5ojDBZyGUuy66_EXwGIloT0P-YKEYiWhPQ_5gob-GEBV2Jpz59HTDrqoXaefnbYpON8C-XXIWt2edO8HZ&_nc_ohc=9BdmZlmVEtIQ7kNvgFn8yDs&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=Ao5CLcVFBduJcYJTil8gIS3&oh=00_AYCVJWQvhcbT0Jyxk8NRtbNtHn5-2U7SJ4UJlrzeDc5J9A&oe=66F201F9'
 
