@@ -9,44 +9,30 @@ import CommentIcon from '@mui/icons-material/Comment';
 import { Typography } from '@mui/material'
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box'
-function Card({ temporaryHideMedia }) {
-  if (temporaryHideMedia) {
-    return (
-      <MuiCard sx={{
-        cursor: 'pointer',
-        boxShadow: '0 1px 1px rgba(0,0,0,0.2)',
-        overflow: 'unset'
-      }}>
-
-        <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-          <Typography>tesst</Typography>
-        </CardContent>
-
-      </MuiCard>
-
-    )
+function Card({ card }) {
+  const shouldShowCardActions = () => {
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
+
   return (
     <MuiCard sx={{
       cursor: 'pointer',
       boxShadow: '0 1px 1px rgba(0,0,0,0.2)',
       overflow: 'unset'
-
-
     }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="file:///C:/Users/AD%20MIN/OneDrive/Pictures/Screenshots/4u36ktors1la1.png"
-        title="green iguana"
+      {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover}
       />
+      }
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-        <Typography>Quoc Loc</Typography>
+        <Typography>{card?.title}</Typography>
       </CardContent>
-      <CardActions sx={{ p: '0 4px 8px 4px' }}>
-        <Button size="small" startIcon={<GroupIcon />}>Share</Button>
-        <Button size="small" startIcon={<CommentIcon />}>Share</Button>
-        <Button size="small" startIcon={<AttachFileIcon />}>Share</Button>
-      </CardActions>
+      {shouldShowCardActions() &&
+        <CardActions sx={{ p: '0 4px 8px 4px' }}>
+          {!!card?.memberIds?.length && <Button size="small" startIcon={<GroupIcon />}>{card?.memberIds?.length}</Button>}
+          {!!card?.comments?.length && <Button size="small" startIcon={<CommentIcon />}>{card?.comments?.length}</Button>}
+          {!!card?.attachments?.length && <Button size="small" startIcon={<AttachFileIcon />}>{card?.attachments?.length}</Button>}
+        </CardActions>
+      }
     </MuiCard>
 
   )
