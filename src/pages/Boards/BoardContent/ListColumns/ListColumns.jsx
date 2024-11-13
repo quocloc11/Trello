@@ -6,8 +6,25 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import { createNewColumnAPI } from '~/apis';
+import { generatePlaceholderCard } from '~/utils/formatters';
+import { cloneDeep } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchBoardDetailsAPI,
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+}
+  from '~/redux/activeBoard/activeBoardSlide'
+function ListColumns({
+  columns,
+  //createNewColumn, 
+  //createNewCard,
+  //deleteColumnDetails 
+}) {
+  const board = useSelector(selectCurrentActiveBoard)
+  const dispatch = useDispatch()
 
-function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
   const [newColumnTitle, setNewColumnTitle] = useState('')
@@ -20,7 +37,21 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
     const newColumnData = {
       title: newColumnTitle
     }
-    await createNewColumn(newColumnData)
+
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board._id
+    })
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+    // const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    //setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
+
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -38,9 +69,12 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
       }}>
 
         {/* box column */}
-        {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard}
-          deleteColumnDetails={deleteColumnDetails}
-        />)}
+        {columns?.map(column =>
+          <Column key={column._id}
+            column={column}
+          // createNewCard={createNewCard}
+          // deleteColumnDetails={deleteColumnDetails}
+          />)}
         {
           !openNewColumnForm
             ?

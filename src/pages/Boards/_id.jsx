@@ -8,85 +8,73 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { mapOrder } from '~/utils/sorts'
 import Box from '@mui/material/Box'
 import {
-  fetchBoardDetailsAPI, createNewCardAPI,
+  //fetchBoardDetailsAPI, 
+  createNewCardAPI,
   createNewColumnAPI, updateBoardDetailsAPI,
   updateColumnDetailsAPI, moveCardToDifferentColumnAPI,
   deleteColumnDetailsAPI
 } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
-import { isEmpty } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { Typography } from '@mui/material'
 import { toast } from 'react-toastify'
-function Board() {
-  const [board, setBoard] = useState(null)
+import {
+  fetchBoardDetailsAPI,
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+}
+  from '~/redux/activeBoard/activeBoardSlide'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+
+function Board() {
+  const dispatch = useDispatch()
+  //const [board, setBoard] = useState(null)
+  const board = useSelector(selectCurrentActiveBoard)
+  const { boardId } = useParams()
+  console.log('boardId', boardId)
   useEffect(() => {
     // tam thoi fix cung hoac dung react-router-dom
-    const boardId = '671089222737fc3f008d25ee'
-    fetchBoardDetailsAPI(boardId).then((board) => {
-      board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
-      board.columns.forEach(column => {
-        if (isEmpty(column.cards)) {
-          column.cards = [generatePlaceholderCard(column)]
-          column.cardOrderIds = [generatePlaceholderCard(column)._id]
-        } else {
-          column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
-        }
-      })
-      setBoard(board)
-    })
-  }, [])
-  const createNewColumn = async (newColumnData) => {
-    const createdColumn = await createNewColumnAPI({
-      ...newColumnData,
-      boardId: board._id
-    })
-    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
-    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+    //const boardId = '671089222737fc3f008d25ee'
 
-    const newBoard = { ...board }
-    newBoard.columns.push(createdColumn)
-    newBoard.columnOrderIds.push(createdColumn._id)
-    setBoard(newBoard)
-  }
+    dispatch(fetchBoardDetailsAPI(boardId))
+    // fetchBoardDetailsAPI(boardId).then((board) => {
+    //   board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
+    //   board.columns.forEach(column => {
+    //     if (isEmpty(column.cards)) {
+    //       column.cards = [generatePlaceholderCard(column)]
+    //       column.cardOrderIds = [generatePlaceholderCard(column)._id]
+    //     } else {
+    //       column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
+    //     }
+    //   })
+    //   setBoard(board)
+    // })
+  }, [dispatch, boardId])
 
 
-  const createNewCard = async (newCardData) => {
-    const createdCard = await createNewCardAPI({
-      ...newCardData,
-      boardId: board._id
-    })
-    const newBoard = { ...board }
-    const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
-    if (columnToUpdate) {
-      if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
-        columnToUpdate.cards = [createdCard]
-        columnToUpdate.cardOrderIds = [createdCard._id]
-      } else {
-        columnToUpdate.cards.push(createdCard)
-        columnToUpdate.cardOrderIds.push(createdCard._id)
-      }
-
-    }
-    setBoard(newBoard)
-  }
   const moveColumns = (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
-    setBoard(newBoard)
+    //setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     updateBoardDetailsAPI(newBoard._id, { columnOrderIds: newBoard.columnOrderIds })
   }
   const moveCardIntheSameColumn = (dndOrderedCards, dndOrderedCardsIds, columnId) => {
-    const newBoard = { ...board }
+    //const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
+
     const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
     if (columnToUpdate) {
       columnToUpdate.cards = dndOrderedCards
       columnToUpdate.cardOrderIds = dndOrderedCardsIds
     }
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardsIds })
   }
@@ -96,7 +84,8 @@ function Board() {
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
-    setBoard(newBoard)
+    //setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     let prevCardOrderIds = dndOrderedColumns.find(c => c._id === prevColumnId)?.cardOrderIds
     if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
@@ -108,16 +97,7 @@ function Board() {
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds,
     })
   }
-  const deleteColumnDetails = (columnId) => {
-    const newBoard = { ...board }
-    newBoard.columns = newBoard.columns.filter(c => c._id !== columnId)
-    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
-    setBoard(newBoard)
 
-    deleteColumnDetailsAPI(columnId).then(res => {
-      toast.success(res?.deleteResult)
-    })
-  }
   if (!board) {
     return (
       <Box sx={{
@@ -139,12 +119,14 @@ function Board() {
       <BoardBar board={board} />
       <BoardContent
         board={board}
-        createNewColumn={createNewColumn}
-        createNewCard={createNewCard}
+
+        // createNewColumn={createNewColumn}
+        //createNewCard={createNewCard}
+        //deleteColumnDetails={deleteColumnDetails}
+
         moveColumns={moveColumns}
         moveCardIntheSameColumn={moveCardIntheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
-        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )
