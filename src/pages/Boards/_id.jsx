@@ -2,22 +2,13 @@ import Container from '@mui/material/Container'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import AppBar from '~/components/AppBar/AppBar'
-import { mockData } from '~/apis/mock-data'
-import { useEffect, useState } from 'react'
-import CircularProgress from '@mui/material/CircularProgress';
-import { mapOrder } from '~/utils/sorts'
-import Box from '@mui/material/Box'
+import { useEffect } from 'react'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import {
-  //fetchBoardDetailsAPI, 
-  createNewCardAPI,
-  createNewColumnAPI, updateBoardDetailsAPI,
-  updateColumnDetailsAPI, moveCardToDifferentColumnAPI,
-  deleteColumnDetailsAPI
+  updateBoardDetailsAPI,
+  updateColumnDetailsAPI, moveCardToDifferentColumnAPI
 } from '~/apis'
-import { generatePlaceholderCard } from '~/utils/formatters'
 import { cloneDeep } from 'lodash'
-import { Typography } from '@mui/material'
-import { toast } from 'react-toastify'
 import {
   fetchBoardDetailsAPI,
   updateCurrentActiveBoard,
@@ -94,24 +85,12 @@ function Board() {
       prevColumnId,
       prevCardOrderIds,
       nextColumnId,
-      nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds,
+      nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds
     })
   }
 
   if (!board) {
-    return (
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 2,
-        width: '100vw',
-        height: '100vh'
-      }}>
-        <CircularProgress />
-        <Typography>Loading Board</Typography>
-      </Box>
-    )
+    return <PageLoadingSpinner caption='Loading Board...' />
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
