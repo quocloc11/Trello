@@ -27,7 +27,6 @@ const MENU_STYLES = {
 }
 
 function BoardBar({ board }) {
-  console.log('board', board)
   return (
     <Box sx={{
       backgroundColor: 'primary.dark',

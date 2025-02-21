@@ -34,14 +34,12 @@ function LoginForm() {
   const registeredEmail = searchParams.get('registeredEmail')
   const verifiedEmail = searchParams.get('verifiedEmail')
   const submitLogIn = (data) => {
-    console.log('data', data)
     const { email, password } = data
 
     toast.promise(
       dispatch(loginUserAPI({ email, password })),
       { pending: 'Logging in...' }
     ).then(res => {
-      console.log('res', res)
       if (!res.error) navigate('/')
     })
   }
