@@ -52,3 +52,9 @@ export const fetchBoardsAPI = async (searchPath) => {
   const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards${searchPath}`)
   return response.data
 }
+
+export const createNewBoardAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/boards`, data)
+  toast.success('Account created successfully! Please check and verify your account before logging in!', { theme: 'colored' })
+  return response.data
+}
