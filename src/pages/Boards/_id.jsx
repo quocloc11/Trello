@@ -15,14 +15,16 @@ import {
   selectCurrentActiveBoard
 }
   from '~/redux/activeBoard/activeBoardSlide'
-
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Board() {
   const dispatch = useDispatch()
   //const [board, setBoard] = useState(null)
   const board = useSelector(selectCurrentActiveBoard)
+
   const { boardId } = useParams()
   console.log('boardId', boardId)
   useEffect(() => {
@@ -94,6 +96,7 @@ function Board() {
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <ActiveCard />
       <AppBar />
       <BoardBar board={board} />
       <BoardContent

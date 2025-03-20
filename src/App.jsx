@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import Settings from './pages/Settings/Settings'
 import Boards from './pages/Boards'
+import NotFound from './pages/404/NotFound'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) return <Navigate to='/login' replace={true} />
@@ -32,7 +33,7 @@ function App() {
       <Route path='/account/verification' element={< AccountVerification />} />
 
 
-      <Route path='*' element={<div>404</div>} />
+      <Route path='*' element={<NotFound />} />
 
     </Routes>
 

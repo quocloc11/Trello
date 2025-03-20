@@ -13,6 +13,7 @@ let authorizedAxiosInstance = axios.create()
 
 authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 
+//cho cokie
 authorizedAxiosInstance.defaults.withCredentials = true
 
 // Interceptor Request: can thiet vao giua request api

@@ -18,12 +18,16 @@ import { persistStore } from 'redux-persist'
 const persistor = persistStore(store)
 
 import { injectStore } from './utils/authorizeAxios'
+import { io } from 'socket.io-client'
+import { API_ROOT } from './utils/constants'
 injectStore(store)
 
+export const socketIoInstance = io(API_ROOT)
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename='/'>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter basename='/'>
         <CssVarsProvider theme={theme}>
           <ConfirmProvider defaultOptions={{
           }}>
@@ -33,7 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <ToastContainer theme='colored' />
           </ConfirmProvider >
         </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 )
