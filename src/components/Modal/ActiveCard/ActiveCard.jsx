@@ -91,7 +91,6 @@ function ActiveCard() {
     callApiUpdateCard({ title: newTitle.trim() })
   }
   const onUpdateCardDescription = (newDescription) => {
-    console.log('newDescription', newDescription)
     // Gọi API...
     callApiUpdateCard({ description: newDescription })
   }

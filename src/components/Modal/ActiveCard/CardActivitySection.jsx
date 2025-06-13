@@ -10,7 +10,6 @@ import { selectCurrentUser } from '~/redux/user/userSlice'
 
 function CardActivitySection({ cardComments = [], onAddCardComment }) {
   const currentUser = useSelector(selectCurrentUser)
-  console.log('cardComments', cardComments)
   const handleAddCardComment = (event) => {
     // Bắt hành động người dùng nhấn phím Enter && không phải hành động Shift + Enter
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -23,7 +22,6 @@ function CardActivitySection({ cardComments = [], onAddCardComment }) {
         userDisplayName: currentUser?.displayName,
         content: event.target.value.trim()
       }
-      console.log('commentToAdd', commentToAdd)
       onAddCardComment(commentToAdd).then(() => {
         event.target.value = ''
       })
@@ -36,7 +34,7 @@ function CardActivitySection({ cardComments = [], onAddCardComment }) {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
         <Avatar
           sx={{ width: 36, height: 36, cursor: 'pointer' }}
-          alt="trungquandev"
+          alt="dev"
           src={currentUser?.avatar}
         />
         <TextField
@@ -55,10 +53,10 @@ function CardActivitySection({ cardComments = [], onAddCardComment }) {
       }
       {cardComments.map((comment, index) =>
         <Box sx={{ display: 'flex', gap: 1, width: '100%', mb: 1.5 }} key={index}>
-          <Tooltip title="trungquandev">
+          <Tooltip title="dev">
             <Avatar
               sx={{ width: 36, height: 36, cursor: 'pointer' }}
-              alt="trungquandev"
+              alt="dev"
               src={comment.userAvatar}
             />
           </Tooltip>

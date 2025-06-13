@@ -45,7 +45,6 @@ function Notifications() {
 
   const dispatch = useDispatch()
 
-  console.log('dispatch(fetchInvitationsAPI())', dispatch(fetchInvitationsAPI()))
 
   useEffect(() => {
     dispatch(fetchInvitationsAPI())
@@ -69,8 +68,6 @@ function Notifications() {
   }, [dispatch, currentUser._id])
 
   const updateBoardInvitation = (status, invitationId) => {
-    console.log('status: ', status)
-    console.log('invitationId: ', invitationId)
     dispatch(updateBoardInvitationAPI({ status, invitationId }))
       .then(res => {
 

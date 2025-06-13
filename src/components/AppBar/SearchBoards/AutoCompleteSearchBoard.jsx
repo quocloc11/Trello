@@ -1,7 +1,4 @@
-/**
- * Author: TrungQuanDev - Một Lập Trình Viên
- * YouTube: https://youtube.com/@trungquandev
- */
+
 import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -11,10 +8,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { fetchBoardsAPI } from '~/apis'
 import { useDebounceFn } from '~/customHooks/useDebounceFn'
-/**
- * Hướng dẫn & ví dụ cái Autocomplele của MUI ở đây:
- * https://mui.com/material-ui/react-autocomplete/#asynchronous-requests
- */
+
 function AutoCompleteSearchBoard() {
   const navigate = useNavigate()
 
@@ -38,7 +32,6 @@ function AutoCompleteSearchBoard() {
 
     // Dùng createSearchParams của react-router-dom để tạo một cái searchPath chuẩn với q[title] để gọi lên API
     const searchPath = `?${createSearchParams({ 'q[title]': searchValue })}`
-    console.log(searchPath)
 
     setLoading(true)
     fetchBoardsAPI(searchPath).then(res => {
@@ -54,7 +47,6 @@ function AutoCompleteSearchBoard() {
   // Khi chúng ta select chọn một cái board cụ thể thì sẽ điều hướng tới board đó luôn
   const handleSelectedBoard = (event, selectedBoard) => {
     // Phải kiểm tra nếu tồn tại một cái board cụ thể được select thì mới gọi điều hướng - navigate
-    console.log(selectedBoard)
     if (selectedBoard) {
       navigate(`/boards/${selectedBoard._id}`)
     }
