@@ -15,11 +15,18 @@ export default defineConfig({
     ]
   },
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js'
+      }
+    }
   },
   server: {
     port: 5173
   },
-  // 👇 Quan trọng cho SPA routing khi deploy
-  base: '/',
+  base: '/', // Đường dẫn tuyệt đối để SPA routing không lỗi
 })
